@@ -6,9 +6,9 @@ Use Python 3.9.21 for consistency (This is the most stable version with most pyt
 
 Use the commands below to create virtual environment
 ```
-python -m venv myenv
-source myenv/bin/activate  # Linux/macOS
-myenv\Scripts\activate.bat  # Windows
+python -m venv venv
+source venv/bin/activate  # Linux/macOS
+venv\Scripts\activate.bat  # Windows
 pip install -r requirements.txt
 ```
 
