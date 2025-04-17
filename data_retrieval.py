@@ -5,9 +5,6 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from io import BytesIO
 from datetime import datetime
-DOWNLOAD_DIR = 'fuelcheck_monthly_files'
-import os
-
 
 def retrieve_fuelcheck_monthly_data():
     print("Retrieving NSW FuelCheck monthly data from Jan 2024 – Mar 2025...")
