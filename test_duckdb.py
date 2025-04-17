@@ -17,9 +17,9 @@ def test_fuel_data_queries():
     print("\n⛽ Average price per fuel type:")
     avg_price = con.execute(
         """
-        SELECT source_file, AVG(price) AS avg_price
+        SELECT fuelcode, AVG(price) AS avg_price
         FROM fuel_data
-        GROUP BY source_file
+        GROUP BY fuelcode
         ORDER BY avg_price DESC
         LIMIT 10
     """
