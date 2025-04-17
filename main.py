@@ -15,4 +15,3 @@ def main():
     convert_cleaned_data_to_csv(fuelcheck_raw_data) #Calling Convert Function
 
 main() 
-
