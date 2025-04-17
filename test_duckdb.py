@@ -1,6 +1,5 @@
 import duckdb
 
-
 def test_fuel_data_queries():
     con = duckdb.connect("db/fuelcheck.duckdb")
 
@@ -27,7 +26,6 @@ def test_fuel_data_queries():
     print(avg_price)
 
     con.close()
-
 
 if __name__ == "__main__":
     test_fuel_data_queries()
