@@ -156,5 +156,6 @@ def data_cleaning(fuelcheck_raw_data):
 # Convert cleaned data to CSV
 def convert_cleaned_data_to_csv(fuelcheck_raw_data):    
     output_file = "cleaned_fuelcheck_data.csv"
+    fuelcheck_raw_data = fuelcheck_raw_data.drop(columns=["source_file"])
     fuelcheck_raw_data.to_csv(output_file, index=False)
     print(f"Converted Cleaned data saved to {output_file}")
