@@ -1,10 +1,3 @@
-#Import neceassary libraries
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
-from io import BytesIO
-
-
 #Retrieve Data
 
 def retrieve_fuelcheck_monthly_data():
@@ -12,6 +5,11 @@ def retrieve_fuelcheck_monthly_data():
 
     base_url = "https://data.nsw.gov.au/data/dataset/fuel-check"
     html_response = requests.get(base_url)
+
+    if(html_response.status_code != 200):
+        print("Failed to access page:", html_response.status_code)
+        return pd.DataFrame()
+    
     soup = BeautifulSoup(html_response.text, "html.parser")
 
     allowed_extensions = ['.xlsx', '.xls', '.csv']
@@ -20,17 +18,16 @@ def retrieve_fuelcheck_monthly_data():
     short_months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun',
                     'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 
-    target_patterns = [m + "2024" for m in long_months] + [m + "2024" for m in short_months]
-    target_patterns += [m + "2025" for m in long_months[:3]] + [m + "2025" for m in short_months[:3]]
-    target_patterns += [m + "25" for m in long_months[:3]] + [m + "25" for m in short_months[:3]]
+    target_patterns = [m + "2024" for m in long_months + short_months]
+    target_patterns += [m + "2025" for m in long_months[:3] + short_months[:3]]
+    target_patterns += [m + "25" for m in long_months[:3] + short_months[:3]]
 
     download_links = []
-    for tag in soup.find_all("a", href=True):
+    for tag in soup.select("a[href$='.xls'], a[href$='.xlsx'], a[href$='.csv']"):
         href = tag['href'].lower()
-        if(any(href.endswith(ext) for ext in allowed_extensions)):
-            clean_href = href.replace('-', '').replace('_', '')
-            if(any(pattern in clean_href for pattern in target_patterns)):
-                download_links.append(tag['href'])
+        clean_href = href.replace('-', '').replace('_', '')
+        if any(pattern in clean_href for pattern in target_patterns):
+            download_links.append(tag['href'])
 
     print(f"Found {len(download_links)} monthly files.")
 
@@ -58,9 +55,21 @@ def retrieve_fuelcheck_monthly_data():
         print("No data loaded.")
         return pd.DataFrame()
     
-#Calling Retrivel Function 
+def test_retrieve_fuelcheck_monthly_data(fuelcheck_raw_data):
+    #Total number of rows and columns
+    print("\nDataset shape (rows, columns):")
+    print(fuelcheck_raw_data.shape)
 
-fuelcheck_raw_data = retrieve_fuelcheck_monthly_data()
-fuelcheck_raw_data.head()
+    #Count missing (null) values in each column
+    print("\nNull values per column:")
+    print(fuelcheck_raw_data.isnull().sum())
 
+    #First 10 rows of the dataset
+    print("\n First 10 rows of the dataset:")
+    display(fuelcheck_raw_data.head(10))
 
+    #Check the datatypes of type columns 
+    fuelcheck_raw_data.dtypes
+
+    #Check dates
+    print(fuelcheck_raw_data['PriceUpdatedDate'].astype(str).unique()[:5])
