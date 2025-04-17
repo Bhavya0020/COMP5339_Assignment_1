@@ -72,11 +72,11 @@ def store_to_duckdb(fuel_df):
         )
 
     con.close()
-    print("💾 Schema and data stored in db/fuelcheck.duckdb")
+    print("Schema and data stored in db/fuelcheck.duckdb")
 
 if __name__ == "__main__":
     df = pd.read_csv(
-        "/Users/bhavyadhingra/Desktop/USYD_Study/SEM_3/Data Engineering/COMP5339_Assignment_1/cleaned_fuelcheck_data.csv",
+        "/cleaned_fuelcheck_data.csv",
         low_memory=False
     )
     print(df.head())

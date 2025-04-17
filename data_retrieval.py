@@ -3,18 +3,18 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
-from io import BytesIO
-from datetime import datetime
 import os
 DOWNLOAD_DIR = 'fuelcheck_monthly_files'
 
 def retrieve_fuelcheck_monthly_data():
-    print("Retrieving NSW FuelCheck monthly data from Jan 2024 – Mar 2025...")
+    print("Retrieving NSW FuelCheck monthly data from Jan 2024 – Mar 2025")
+    if not os.path.exists(DOWNLOAD_DIR):
+        print(f"Creating download directory: {DOWNLOAD_DIR}")
+        os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
     base_url = "https://data.nsw.gov.au/data/dataset/fuel-check"
     html_response = requests.get(base_url)
     soup = BeautifulSoup(html_response.text, "html.parser")
-
     allowed_extensions = ['.xlsx', '.xls', '.csv']
     long_months = ['january', 'february', 'march', 'april', 'may', 'june',
                    'july', 'august', 'september', 'october', 'november', 'december']
@@ -32,14 +32,11 @@ def retrieve_fuelcheck_monthly_data():
             clean_href = href.replace('-', '').replace('_', '')
             if any(pattern in clean_href for pattern in target_patterns):
                 download_links.append(tag['href'])
-
     print(f"Found {len(download_links)} monthly files.")
-
     monthly_dataframes = []
     for file_link in download_links:
         filename = file_link.split('/')[-1]  # Extract file name from URL
         local_path = os.path.join(DOWNLOAD_DIR, filename)
-
         if os.path.exists(local_path):
             print(f"Using cached file: {local_path}")
             if filename.endswith(('.xls', '.xlsx')):
@@ -52,7 +49,6 @@ def retrieve_fuelcheck_monthly_data():
                 response = requests.get(file_link)
                 with open(local_path, 'wb') as f:
                     f.write(response.content)
-
                 if filename.endswith(('.xls', '.xlsx')):
                     df_month = pd.read_excel(local_path)
                 elif filename.endswith('.csv'):
@@ -62,10 +58,8 @@ def retrieve_fuelcheck_monthly_data():
             except Exception as e:
                 print(f"Failed to load {file_link}: {e}")
                 continue
-
         df_month['source_file'] = file_link
         monthly_dataframes.append(df_month)
-
     if monthly_dataframes:
         combined_df = pd.concat(monthly_dataframes, ignore_index=True)
         print(f"Combined dataset shape: {combined_df.shape}")
@@ -90,5 +84,5 @@ def test_retrieve_fuelcheck_monthly_data(fuelcheck_raw_data):
     #Check the datatypes of type columns 
     fuelcheck_raw_data.dtypes
 
-    # #Check dates
-    # print(fuelcheck_raw_data['PriceUpdatedDate'].astype(str).unique()[:5])
+    #Check dates
+    print(fuelcheck_raw_data['PriceUpdatedDate'].astype(str).unique()[:5])

@@ -1,11 +1,6 @@
 #Import neceassary libraries 
-import requests
-from bs4 import BeautifulSoup
 import pandas as pd
-from io import BytesIO
 from datetime import datetime
-import os 
-DOWNLOAD_DIR = 'fuelcheck_monthly_files'
 
 def data_cleaning(fuelcheck_raw_data):
     #Drop fully empty rows
@@ -20,16 +15,13 @@ def data_cleaning(fuelcheck_raw_data):
 
     # Strip leading/trailing spaces in all text columns
     str_columns = fuelcheck_raw_data.select_dtypes(include='object').columns
-
     print("Stripping whitespace from the following string columns:")
     print(str_columns.tolist())
 
     fuelcheck_raw_data[str_columns] = fuelcheck_raw_data[str_columns].apply(lambda col: col.str.strip())
-
     print("Whitespace removed.")
 
     # Issue with PriceUpdatedDate
-
     # Null/NaN values
     null_count = fuelcheck_raw_data['PriceUpdatedDate'].isnull().sum()
 
@@ -54,7 +46,6 @@ def data_cleaning(fuelcheck_raw_data):
     fuelcheck_raw_data['PriceUpdatedDate'].isnull() |
     fuelcheck_raw_data['PriceUpdatedDate'].astype(str).str.strip().isin(['', '--', '-', 'null', 'n/a', 'na', '0'])
     ]
-
     print(bad_rows[['PriceUpdatedDate', 'source_file']].head(10))
 
     # Convert Price column to numeric and remove outliers
@@ -66,8 +57,34 @@ def data_cleaning(fuelcheck_raw_data):
         print(f"Filtered out {before_rows - after_rows} rows with invalid prices.")
     else:
         print("'Price' column not found in dataset.")
+
+    # Extracting the months from source link to apply default date to null values
+    def infer_date_from_filename(filename):
+        month_map = {
+            'jan': 1, 'january': 1,
+            'feb': 2, 'february': 2,
+            'mar': 3, 'march': 3,
+            'apr': 4, 'april': 4,
+            'may': 5,
+            'jun': 6, 'june': 6,
+            'jul': 7, 'july': 7,
+            'aug': 8, 'august': 8,
+            'sep': 9, 'september': 9,
+            'oct': 10, 'october': 10,
+            'nov': 11, 'november': 11,
+            'dec': 12, 'december': 12
+        }
+
+        filename = filename.lower().replace('-', '').replace('_', '')
+        for key, month in month_map.items():
+            if key in filename:
+                if '2024' in filename:
+                    return datetime(2024, month, 1)
+                elif '2025' in filename or '25' in filename:
+                    return datetime(2025, month, 1)
+        return pd.NaT
     
-        # Fill missing PriceUpdatedDate using source_file name
+    # Fill missing PriceUpdatedDate using source_file name
     print("Remaining nulls in 'PriceUpdatedDate':", fuelcheck_raw_data['PriceUpdatedDate'].isnull().sum())
     if('PriceUpdatedDate' in fuelcheck_raw_data.columns and 'source_file' in fuelcheck_raw_data.columns):
         null_count = fuelcheck_raw_data['PriceUpdatedDate'].isnull().sum()
@@ -126,43 +143,9 @@ def data_cleaning(fuelcheck_raw_data):
     # Random sample
     print("\nSample rows:")
     print(fuelcheck_raw_data.sample(5, random_state=42))
-    print("NULL:", fuelcheck_raw_data.isna().sum())
-
-    return fuelcheck_raw_data
-
-# Extracting the months from source link to apply default date to null values
-def infer_date_from_filename(filename):
-    month_map = {
-        'jan': 1, 'january': 1,
-        'feb': 2, 'february': 2,
-        'mar': 3, 'march': 3,
-        'apr': 4, 'april': 4,
-        'may': 5,
-        'jun': 6, 'june': 6,
-        'jul': 7, 'july': 7,
-        'aug': 8, 'august': 8,
-        'sep': 9, 'september': 9,
-        'oct': 10, 'october': 10,
-        'nov': 11, 'november': 11,
-        'dec': 12, 'december': 12
-    }
-
-    filename = filename.lower().replace('-', '').replace('_', '')
-    for key, month in month_map.items():
-        if key in filename:
-            if '2024' in filename:
-                return datetime(2024, month, 1)
-            elif '2025' in filename or '25' in filename:
-                return datetime(2025, month, 1)
-    return pd.NaT
-
-
 
 # Convert cleaned data to CSV
 def convert_cleaned_data_to_csv(fuelcheck_raw_data):    
     output_file = "cleaned_fuelcheck_data.csv"
-    fuelcheck_raw_data = fuelcheck_raw_data.drop(columns=["source_file"])
-    print(fuelcheck_raw_data.head())
-    print("NULL:", fuelcheck_raw_data.isna().sum())
     fuelcheck_raw_data.to_csv(output_file, index=False)
     print(f"Converted Cleaned data saved to {output_file}")
