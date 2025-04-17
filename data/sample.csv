@@ -1,0 +1,11 @@
+Unnamed: 0,servicestationname,address,suburb,postcode,brand,fuelcode,priceupdateddate,price,source_file
+0,Costco Canberra Airport (Members Only),"39-41 Mustang Avenue, Canberra Airport ACT 2609",Canberra Airport,2609,Costco,U91,2024-01-01 00:44:05,168.7,fuelcheck_pricehistory_jan2024.xlsx
+1,Costco Canberra Airport (Members Only),"39-41 Mustang Avenue, Canberra Airport ACT 2609",Canberra Airport,2609,Costco,P98,2024-01-01 00:44:05,189.7,fuelcheck_pricehistory_jan2024.xlsx
+2,Costco Canberra Airport (Members Only),"39-41 Mustang Avenue, Canberra Airport ACT 2609",Canberra Airport,2609,Costco,PDL,2024-01-01 00:44:05,177.7,fuelcheck_pricehistory_jan2024.xlsx
+3,Costco Casula (Members only),"20 Parkersfarm Place, Casula NSW 2170",Casula,2170,Costco,E10,2024-01-01 00:44:11,164.7,fuelcheck_pricehistory_jan2024.xlsx
+4,Costco Casula (Members only),"20 Parkersfarm Place, Casula NSW 2170",Casula,2170,Costco,P98,2024-01-01 00:44:11,188.7,fuelcheck_pricehistory_jan2024.xlsx
+5,Costco Casula (Members only),"20 Parkersfarm Place, Casula NSW 2170",Casula,2170,Costco,PDL,2024-01-01 00:44:11,176.7,fuelcheck_pricehistory_jan2024.xlsx
+6,Costco Lake Macquarie (Members only),"1 CRESSY RD, BOOLAROO NSW 2284",BOOLAROO,2284,Costco,E10,2024-01-01 00:44:17,166.7,fuelcheck_pricehistory_jan2024.xlsx
+7,Costco Lake Macquarie (Members only),"1 CRESSY RD, BOOLAROO NSW 2284",BOOLAROO,2284,Costco,P98,2024-01-01 00:44:17,188.7,fuelcheck_pricehistory_jan2024.xlsx
+8,Costco Lake Macquarie (Members only),"1 CRESSY RD, BOOLAROO NSW 2284",BOOLAROO,2284,Costco,PDL,2024-01-01 00:44:17,178.7,fuelcheck_pricehistory_jan2024.xlsx
+9,Costco Marsden Park (Members only),"10 Langford Drive, MARSDEN PARK NSW 2765",MARSDEN PARK,2765,Costco,E10,2024-01-01 00:44:22,168.7,fuelcheck_pricehistory_jan2024.xlsx

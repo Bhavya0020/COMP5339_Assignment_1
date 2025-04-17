@@ -1,4 +1,13 @@
 #Retrieve Data
+#Import neceassary libraries 
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+from io import BytesIO
+from datetime import datetime
+DOWNLOAD_DIR = 'fuelcheck_monthly_files'
+import os
+
 
 def retrieve_fuelcheck_monthly_data():
     print("Retrieving NSW FuelCheck monthly data from Jan 2024 – Mar 2025...")
@@ -77,7 +86,7 @@ def test_retrieve_fuelcheck_monthly_data(fuelcheck_raw_data):
 
     #First 10 rows of the dataset
     print("\n First 10 rows of the dataset:")
-    display(fuelcheck_raw_data.head(10))
+    print(fuelcheck_raw_data.head(10))
 
     #Check the datatypes of type columns 
     fuelcheck_raw_data.dtypes

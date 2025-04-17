@@ -1,3 +1,6 @@
+from data_retrieval import *
+from data_integration import *
+
 # Main Function -
 def main():
     #Step 1: Retrieving the data
@@ -11,5 +14,5 @@ def main():
     #Save the cleaned data to CSV
     convert_cleaned_data_to_csv(fuelcheck_raw_data) #Calling Convert Function
 
-main() #Calling Main Function
+main() 
 

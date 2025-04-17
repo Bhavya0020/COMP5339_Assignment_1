@@ -1,3 +1,12 @@
+#Import neceassary libraries 
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+from io import BytesIO
+from datetime import datetime
+DOWNLOAD_DIR = 'fuelcheck_monthly_files'
+import os
+
 def data_cleaning(fuelcheck_raw_data):
     #Drop fully empty rows
     print("Rows before dropping empty rows:", len(fuelcheck_raw_data))
@@ -46,7 +55,7 @@ def data_cleaning(fuelcheck_raw_data):
     fuelcheck_raw_data['PriceUpdatedDate'].astype(str).str.strip().isin(['', '--', '-', 'null', 'n/a', 'na', '0'])
     ]
 
-    display(bad_rows[['PriceUpdatedDate', 'source_file']].head(10))
+    print(bad_rows[['PriceUpdatedDate', 'source_file']].head(10))
 
     # Convert Price column to numeric and remove outliers
     if('Price' in fuelcheck_raw_data.columns):
@@ -142,7 +151,7 @@ def data_cleaning(fuelcheck_raw_data):
 
     # Random sample
     print("\nSample rows:")
-    display(fuelcheck_raw_data.sample(5, random_state=42))
+    print(fuelcheck_raw_data.sample(5, random_state=42))
 
 
 # Convert cleaned data to CSV
