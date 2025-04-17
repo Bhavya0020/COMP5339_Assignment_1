@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from io import BytesIO
 from datetime import datetime
-
+import os 
+DOWNLOAD_DIR = 'fuelcheck_monthly_files'
 def data_cleaning(fuelcheck_raw_data):
     #Drop fully empty rows
     print("Rows before dropping empty rows:", len(fuelcheck_raw_data))

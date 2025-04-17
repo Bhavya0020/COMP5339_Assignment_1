@@ -5,6 +5,8 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from io import BytesIO
 from datetime import datetime
+import os
+DOWNLOAD_DIR = 'fuelcheck_monthly_files'
 
 def retrieve_fuelcheck_monthly_data():
     print("Retrieving NSW FuelCheck monthly data from Jan 2024 – Mar 2025...")
@@ -88,5 +90,5 @@ def test_retrieve_fuelcheck_monthly_data(fuelcheck_raw_data):
     #Check the datatypes of type columns 
     fuelcheck_raw_data.dtypes
 
-    #Check dates
-    print(fuelcheck_raw_data['PriceUpdatedDate'].astype(str).unique()[:5])
+    # #Check dates
+    # print(fuelcheck_raw_data['PriceUpdatedDate'].astype(str).unique()[:5])
