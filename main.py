@@ -1,5 +1,6 @@
 from data_retrieval import *
 from data_integration import *
+import pandas as pd
 
 # Main Function -
 def main():
@@ -9,9 +10,11 @@ def main():
     test_retrieve_fuelcheck_monthly_data(fuelcheck_raw_data) #Calling Test Function
 
     #Step 2: Data Cleaning
-    data_cleaning(fuelcheck_raw_data) #Calling Data Cleaning Function
+    fuelcheck_clean_data = data_cleaning(fuelcheck_raw_data) #Calling Data Cleaning Function
 
     #Save the cleaned data to CSV
-    convert_cleaned_data_to_csv(fuelcheck_raw_data) #Calling Convert Function
+    convert_cleaned_data_to_csv(fuelcheck_clean_data) #Calling Convert Function
+
+pd.reset_option('display.max_columns')
 
 main() 
